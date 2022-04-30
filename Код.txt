@@ -1,0 +1,158 @@
+import tkinter as tk
+from tkinter import *
+from tkinter import *
+
+
+class SampleAPP(tk.Tk):
+
+    def __init__(self, *arg, **kwargs):
+        tk.Tk.__init__(self, *arg, **kwargs)
+        container = tk.Frame(self)
+        container.pack(side="top", fill="both", expand=True)
+        container.grid_rowconfigure(0, weight=1)
+        container.grid_columnconfigure(0, weight=1)
+
+        self.frames = {}
+        for F in (StartPage, MenuPage, CorrectPage):
+            page_name = F.__name__
+            frame = F(parent=container, controller=self)
+            self.frames[page_name] = frame
+
+            frame.grid(row=0, column=0, sticky="nsew")
+
+            self.show_frame("StartPage")
+
+    def show_frame(self, page_name):
+        frame = self.frames[page_name]
+        frame.tkraise()
+
+
+class StartPage(tk.Frame):
+
+    def __init__(self, parent, controller):
+
+        tk.Frame.__init__(self, parent, bg="silver")
+        self.controller = controller
+        self.controller.title("DreamBuild")
+        self.controller.state('zoomed')
+
+        big_lable = tk.Label(self, text="Welcome to \n Dr. build", font=('Times New Roman', 45, 'bold'), fg="black",
+                             bg="silver")
+        big_lable.pack(pady=25)
+
+        login_lable = tk.Label(self, text="Login", font=('Times New Roman', 15, 'bold'), fg="black", bg="silver")
+        login_lable.pack(pady=15)
+
+        my_login = tk.StringVar()
+        login_entry = tk.Entry(self, textvariable=my_login, font=('Times New Roman', 15, 'bold'), fg="black",
+                               bg="white")
+        login_entry.pack(pady=15)
+
+        password_lable = tk.Label(self, text="Password", font=('Times New Roman', 15, 'bold'), fg="black", bg="silver")
+        password_lable.pack()
+
+        my_password = tk.StringVar()
+        password_entry = tk.Entry(self, textvariable=my_password, font=('Times New Roman', 15, 'bold'), fg="black",
+                                  bg="white")
+        password_entry.pack(pady=15)
+
+        number_Lable = tk.Label(self, text="If you forgot your password, enter the number",
+                                font=('Times New Roman', 15, 'bold'), fg="black", bg="silver")
+        number_Lable.pack()
+
+        my_number = tk.StringVar()
+        number_entry = tk.Entry(self, textvariable=my_number, font=('Times New Roman', 15, 'bold'), fg="black",
+                                bg="white")
+        number_entry.pack(pady=15)
+
+        def check_password():
+            if my_password.get() == "1703" and my_login.get() == "user":
+                controller.show_frame('MenuPage')
+            elif my_number.get() == "+998(90)000-33-66":
+                controller.show_frame('MenuPage')
+
+            else:
+                right_lable['text'] = " Please try again "
+
+        password_button = tk.Button(self, text="Sign in", command=check_password,
+                                    font=('Times New Roman', 15, 'bold'), fg="black", bg="silver")
+        password_button.pack()
+        right_lable = tk.Label(self, font=('Times New Roman', 15, 'bold'), fg="black", bg="silver")
+        right_lable.pack(pady=30)
+
+
+class MenuPage(tk.Frame):
+
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent, bg="silver", )
+        self.controlle = controller
+        big_lable = tk.Label(self, text="Account: user", font=('Times New Roman', 50, 'bold'), fg="black", bg="silver")
+        big_lable.pack(pady=30)
+
+        def return_page():
+            controller.show_frame('StartPage')
+
+        return_button = tk.Button(self, text="Menu", command=return_page, font=('Times New Roman', 15, 'bold'),
+                                  fg="black", bg="silver")
+        return_button.pack(pady=30)
+
+        service_lable = tk.Label(self, text="Choose interior/apartment/workers", font=('Times New Roman', 15, 'bold'),
+                                 fg="black", bg="silver")
+        service_lable.pack(pady=15)
+
+        my_service = tk.StringVar()
+        service_entry = tk.Entry(self, textvariable=my_service, font=('Times New Roman', 15, 'bold'), fg="black",
+                                 bg="white")
+        service_entry.pack(pady=15)
+
+        problem_lable = tk.Label(self, text="Describe your problem", font=('Times New Roman', 15, 'bold'), fg="black",
+                                 bg="silver")
+        problem_lable.pack()
+
+        my_problem = tk.StringVar()
+        problem_entry = tk.Entry(self, textvariable=my_problem, font=('Times New Roman', 15, 'bold'), fg="black",
+                                 bg="white")
+        problem_entry.pack(pady=15)
+
+        def check_service():
+            if my_service.get() == "interior":
+                controller.show_frame('CorrectPage')
+            elif my_service.get() == "apartment":
+                controller.show_frame('CorrectPage')
+            elif my_service.get() == "workers":
+                controller.show_frame('CorrectPage')
+
+            else:
+                right_lable['text'] = " Please try again "
+
+        service_button = tk.Button(self, text="NEXT", command=check_service,
+                                   font=('Times New Roman', 15, 'bold'), fg="black", bg="silver")
+        service_button.pack()
+
+        right_lable = tk.Label(self, font=('Times New Roman', 15, 'bold'), fg="black", bg="silver")
+        right_lable.pack(pady=30)
+
+
+class CorrectPage(tk.Frame):
+
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent, bg="silver", )
+        self.controlle = controller
+        big_lable = tk.Label(self, text="Your application has been accepted, please wait for feedback",
+                             font=('Times New Roman', 20, 'bold'), fg="green", bg="silver")
+        big_lable.pack(pady=30)
+
+        def return_page():
+            controller.show_frame('StartPage')
+
+        return_button = tk.Button(self, text="Main menu", command=return_page, font=('Times New Roman', 15, 'bold'),
+                                  fg="black", bg="silver")
+        return_button.pack(pady=100)
+
+
+if __name__ == "__main__":
+    app = SampleAPP()
+
+    app.mainloop()
+
+
